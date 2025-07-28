@@ -1,8 +1,5 @@
-### Our code is still being sorted out and will be uploaded immediately after completion.
-
 # MICCAI-2025-Paper-VT-SNN
 VT-SNN: Variable Time-step Spiking Neural Network Based on Uncertainty Measure and Its Application in Brain Disease Diagnosis
-
 
 ### Our codes are based on the following framework.
 
