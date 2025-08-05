@@ -170,21 +170,22 @@ def main():
             for t in range(args.T):
                 image_x = image[t]
                 out_fr += model(image_x)
-                out_fr = out_fr / (t + 1)
+                out_fr = out_fr / 2
                 out_fr = out_fr.float()
-                out_fr_1  = softplus_(out_fr) + 1.0
-                model_pred_all.append(out_fr_1.to(args.device))
-                id_alpha_pred_all = torch.cat(model_pred_all, dim=0)
-                print('id_alpha_pred_all', id_alpha_pred_all)
-                p = id_alpha_pred_all / torch.sum(id_alpha_pred_all, dim=-1, keepdim=True)
-                scores = p.max(-1)[0].cpu().detach().numpy()
-                mean_score = sum(scores) / len(scores)
-                print("Mean score:", mean_score)
+                # out_fr_1  = softplus_(out_fr) + 1.0
+                # model_pred_all.append(out_fr_1.to(args.device))
+                # id_alpha_pred_all = torch.cat(model_pred_all, dim=0)
+                # print('id_alpha_pred_all', id_alpha_pred_all)
+                # p = id_alpha_pred_all / torch.sum(id_alpha_pred_all, dim=-1, keepdim=True)
+                # scores = p.max(-1)[0].cpu().detach().numpy()
+                # mean_score = sum(scores) / len(scores)
+                # print("Mean score:", mean_score)
                 # scores = scores[0]
                 # print('scores',scores)
+                p = F.softmax(out_fr, dim=1)  # 转换为概率分布
+                confidence_score = p.max(dim=1)[0].item()  # 取最大概率作为
                 model_pred_all.clear()
-                if mean_score >= 0.85:
-                    # if  (1-uncertaint7) >= 0.75 :
+                if confidence_score >= 0.85:
                     best_T = t + 1
                     break  # 满足条件，T循环
                 else:
@@ -250,4 +251,5 @@ if __name__ == '__main__':
 
 
 # python -m testkk  -device cuda:0 -cupy -resume './logs\spikeformer-uncertainty\T4_8_sgd_lr0.02_c1_drop0.1_fishe_finnal_split1_0.01_amp_cupy/checkpoint_max.pth'
+
 # python -m ood_single  -device cuda:0 -cupy -resume './logs\spikeformer-uncertainty\T4_8_sgd_lr0.02_c1_drop0.1_fishe_finnal_split1_0.01_amp_cupy/checkpoint_max.pth'
