@@ -318,7 +318,7 @@ def main():
                 total_T += best_T
 
                 functional.reset_net(model)
-            avg_T = total_T / 42
+            avg_T = total_T / total_T
 
         test_time = time.time()
         test_speed = test_samples / (test_time - train_time)
@@ -385,4 +385,5 @@ def main():
 
 
 if __name__ == '__main__':
+
     main()
